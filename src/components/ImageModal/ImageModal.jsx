@@ -1,5 +1,5 @@
-import s from './ImageModal.module.css'
 import Modal from 'react-modal';
+import s from './ImageModal.module.css';
 
 const customStyles = {
   content: {
@@ -8,23 +8,28 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
+    transform: 'translate(-50%, -50%)',     
   },
   overlay: {
-    backgroundColor: 'rgba(0,0,0, 0.6) ',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
 };
 
 Modal.setAppElement('#root');
+
 const ImageModal = ({ modalIsOpen, closeModal, src, alt }) => {
   return (
     <Modal
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       style={customStyles}
-      contentLabel="Example Modal"
+      contentLabel="Image Modal"
     >
-      <img src={src} alt={alt} />
+      <div className={s.modal}>        
+        <img src={src} alt={alt} className={s.image} />
+        <p>{ alt}</p>
+       
+      </div>
     </Modal>
   );
 };

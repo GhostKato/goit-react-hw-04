@@ -1,15 +1,15 @@
 import ImageCard from '../ImageCard/ImageCard';
 import s from './ImageGallery.module.css';
 
-function ImageGallery({ images, modalIsOpen }) {
+function ImageGallery({ images, openModal }) {
   return (
     <ul className={s.ul}>
       {images.map(({ id, alt_description, urls }, index) => (
         <ImageCard
-          modalIsOpen={modalIsOpen}
           key={`${id}-${urls.small}-${index}`}
           alt={alt_description}
-          src={urls.small}
+          src={urls.small} 
+          onClick={() => openModal(urls.regular, alt_description)}
         />
       ))}
     </ul>
@@ -17,3 +17,6 @@ function ImageGallery({ images, modalIsOpen }) {
 }
 
 export default ImageGallery;
+
+
+

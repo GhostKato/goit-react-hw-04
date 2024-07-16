@@ -1,12 +1,12 @@
+import React, { useEffect, useState } from 'react';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import Loader from '../Loader/Loader';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import SearchBar from '../SearchBar/SearchBar';
 import { getPhotos } from '../../js/requestUnsplash';
-import { useEffect, useState } from 'react';
 import ImageModal from '../ImageModal/ImageModal';
-import s from './App.module.css'
+import s from './App.module.css';
 
 function App() {
   const [page, setPage] = useState(1);
@@ -23,12 +23,13 @@ function App() {
   useEffect(() => {
     const fetchImages = async () => {
       setLoading(true);
-      try {       
+      try {
         const { results, total } = await getPhotos(query, page);
         if (!results.length) {
           setIsEmpty(true);
           return;
         }
+        console.log(results)
         setImages(prevImages => [...prevImages, ...results]);
         setIsVisible(page < Math.ceil(total / results.length));
       } catch (error) {
@@ -38,11 +39,11 @@ function App() {
       }
     };
     fetchImages();
-  }, [page]);
+  }, [page, query]);
 
   const handleSubmit = value => {
     if (!value.trim()) {
-      alert('Sorry, can\'t be empty');
+      alert('Sorry, can be empty');
       return;
     }
     setQuery(value);
@@ -77,7 +78,7 @@ function App() {
     <div className={s.container}>
       <SearchBar submit={handleSubmit} input={handleChange} query={query} />
       {images.length > 0 && (
-        <ImageGallery images={images} modalIsOpen={ openModal } />
+        <ImageGallery images={images} openModal={openModal} /> // Pass openModal here
       )}
       {loading && <Loader />}
       {isVisible && (
@@ -92,7 +93,7 @@ function App() {
           modalIsOpen={showModal}
           closeModal={closeModal}
           src={modalUrl}
-          alt={alt}
+          alt={alt}          
         />
       )}
     </div>

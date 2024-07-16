@@ -13,6 +13,8 @@
 }
 
 .input {
+  background-color: #2a2d32;
+  border: none;
   height: 50px;
   width: 300px;
   padding-left: 50px;

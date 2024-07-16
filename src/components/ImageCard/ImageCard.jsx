@@ -1,11 +1,16 @@
 import s from './ImageCard.module.css';
 
-function ImageCard({ alt, src, modalIsOpen }) {
+function ImageCard({ alt, src, onClick }) {
+  const handleClick = () => {
+    onClick(src, alt); // This triggers the openModal function
+  };
+
   return (
-    <li onClick={ modalIsOpen } className={s.card}>
-      <img src={src} alt={alt} className={s.img}/>
+    <li className={s.card} onClick={handleClick}>
+      <img src={src} alt={alt} className={s.img} />
     </li>
   );
 }
 
 export default ImageCard;
+

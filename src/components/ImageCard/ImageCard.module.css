@@ -5,6 +5,7 @@
   width: 300px;
   &:hover {
     transform: scale(102%);
+    outline: 2px solid #009156;
   }
 }
 
