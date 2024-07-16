@@ -2,7 +2,7 @@ import s from './ImageCard.module.css';
 
 function ImageCard({ alt, src, onClick }) {
   const handleClick = () => {
-    onClick(src, alt); // This triggers the openModal function
+    onClick(src, alt);
   };
 
   return (

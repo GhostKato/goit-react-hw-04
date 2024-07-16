@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import Loader from '../Loader/Loader';
@@ -20,6 +20,8 @@ function App() {
   const [modalUrl, setModalUrl] = useState('');
   const [alt, setAlt] = useState('');
 
+  const endOfGalleryRef = useRef(null);
+
   useEffect(() => {
     const fetchImages = async () => {
       setLoading(true);
@@ -27,6 +29,7 @@ function App() {
         const { results, total } = await getPhotos(query, page);
         if (!results.length) {
           setIsEmpty(true);
+          setIsVisible(false);
           return;
         }
         console.log(results)
@@ -41,9 +44,15 @@ function App() {
     fetchImages();
   }, [page, query]);
 
+  useEffect(() => {
+    if (endOfGalleryRef.current) {
+      endOfGalleryRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [images]);
+
   const handleSubmit = value => {
     if (!value.trim()) {
-      alert('Sorry, can be empty');
+      alert('Sorry, cant be empty');
       return;
     }
     setQuery(value);
@@ -78,8 +87,9 @@ function App() {
     <div className={s.container}>
       <SearchBar submit={handleSubmit} input={handleChange} query={query} />
       {images.length > 0 && (
-        <ImageGallery images={images} openModal={openModal} /> // Pass openModal here
+        <ImageGallery images={images} openModal={openModal} />
       )}
+      <div ref={endOfGalleryRef}></div>
       {loading && <Loader />}
       {isVisible && (
         <LoadMoreBtn onClick={loadMore} disabled={loading} text={loading ? 'Loading' : 'Load more'} />
@@ -93,7 +103,7 @@ function App() {
           modalIsOpen={showModal}
           closeModal={closeModal}
           src={modalUrl}
-          alt={alt}          
+          alt={alt}
         />
       )}
     </div>
