@@ -7,34 +7,40 @@ import SearchBar from '../SearchBar/SearchBar';
 import { getPhotos } from '../../js/requestUnsplash';
 import ImageModal from '../ImageModal/ImageModal';
 import s from './App.module.css';
+import useToggle from '../../hooks/modalVisibility';
 
 function App() {
   const [page, setPage] = useState(1);
+  const [searchSwitch, setSearchSwitch] = useState(true);
   const [images, setImages] = useState([]);
-  const [query, setQuery] = useState('');
-  const [isEmpty, setIsEmpty] = useState(false);
+  const [query, setQuery] = useState('');  
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);  
   const [modalUrl, setModalUrl] = useState('');
   const [alt, setAlt] = useState('');
+  const [description, setDescription] = useState('');
+
+  const [isOpenModalMenu, toggleModalMenu] = useToggle(false);  
 
   const endOfGalleryRef = useRef(null);
 
   useEffect(() => {
     const fetchImages = async () => {
       setLoading(true);
+      
       try {
+        if (query === '') {
+          setLoading(false);
+          return;
+        }
         const { results, total } = await getPhotos(query, page);
-        if (!results.length) {
-          setIsEmpty(true);
+        if (!results.length) {         
           setIsVisible(false);
           return;
         }
-        console.log(results)
         setImages(prevImages => [...prevImages, ...results]);
-        setIsVisible(page < Math.ceil(total / results.length));
+        setIsVisible(page < Math.ceil(total / results.length));        
       } catch (error) {
         setError(error);
       } finally {
@@ -42,7 +48,7 @@ function App() {
       }
     };
     fetchImages();
-  }, [page]);
+  }, [page, searchSwitch]);
 
   useEffect(() => {
     if (endOfGalleryRef.current) {
@@ -55,10 +61,9 @@ function App() {
       alert('Sorry, cant be empty');
       return;
     }
+    setSearchSwitch(!searchSwitch);
     setQuery(value);
-    setImages([]);
-    // setError(null);
-    setIsEmpty(false);
+    setImages([]);   
     setIsVisible(false);
     setPage(1);
   };
@@ -71,30 +76,30 @@ function App() {
     setPage(prevPage => prevPage + 1);
   };
 
-  const openModal = (url, alt) => {
-    setShowModal(true);
+  const openModal = (url, alt, description) => {
+    toggleModalMenu();
     setAlt(alt);
+    setDescription(description)
     setModalUrl(url);
   };
 
   const closeModal = () => {
-    setShowModal(false);
+    toggleModalMenu();
     setAlt('');
+    setDescription('')
     setModalUrl('');
   };
 
   useEffect(() => {
-  if (error !== null) {    
-    const id = setTimeout(() => {     
-      setError(null);
-    }, 1000);
-    return () => {      
-      clearTimeout(id);
-    };
-  }
-}, [error]);
-
-  
+    if (error !== null) {    
+      const id = setTimeout(() => {     
+        setError(null);
+      }, 1000);
+      return () => {      
+        clearTimeout(id);
+      };
+    }
+  }, [error]);
 
   return (
     <div className={s.container}>
@@ -107,18 +112,14 @@ function App() {
       {isVisible && (
         <LoadMoreBtn onClick={loadMore} disabled={loading} text={loading ? 'Loading' : 'Load more'} />
       )}
-      {error && (
-        <ErrorMessage/>
-       )}
-
-      {showModal && (
-        <ImageModal
-          modalIsOpen={showModal}
-          closeModal={closeModal}
-          src={modalUrl}
-          alt={alt}
-        />
-      )}      
+      {error && <ErrorMessage />}      
+      <ImageModal
+        modalIsOpen={isOpenModalMenu}
+        closeModal={closeModal}
+        src={modalUrl}
+        alt={alt}
+        description={description}
+      />
     </div>
   );
 }

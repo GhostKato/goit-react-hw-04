@@ -17,7 +17,7 @@ const customStyles = {
 
 Modal.setAppElement('#root');
 
-const ImageModal = ({ modalIsOpen, closeModal, src, alt }) => {
+const ImageModal = ({ modalIsOpen, closeModal, src, alt, description }) => {
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -27,7 +27,7 @@ const ImageModal = ({ modalIsOpen, closeModal, src, alt }) => {
     >
       <div className={s.modal}>        
         <img src={src} alt={alt} className={s.image} />
-        <p>{ alt}</p>
+        <p>{ description}</p>
        
       </div>
     </Modal>
