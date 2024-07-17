@@ -13,6 +13,7 @@
 }
 
 .input {
+  color: #f0f0f0;
   background-color: #2a2d32;
   border: none;
   height: 50px;
@@ -20,8 +21,12 @@
   padding-left: 50px;
   border-radius: 5px;
   box-shadow: inset 0px 0px 10px 5px rgba(0, 0, 0, 0.5);
+  text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   &:focus {
     outline: 2px solid #009156;
+  }
+  &::placeholder {
+    text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   }
 }
 

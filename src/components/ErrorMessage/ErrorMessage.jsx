@@ -1,9 +1,16 @@
-import s from './ErrorMessage.module.css'
+import s from './ErrorMessage.module.css';
+import BarLoader from "react-spinners/ScaleLoader";
 
-function ErrorMessage() {
-  return (
-    <div>ErrorMessage</div>
+const ErrorMessage = () => {  
+   
+  return (      
+        
+        <div className={s.error}>
+      <p className={s.p}>Error</p>
+      <BarLoader color={"red"} size={500} height={10}/>
+
+        </div>        
   )
-}
+};
 
-export default ErrorMessage
+export default ErrorMessage;

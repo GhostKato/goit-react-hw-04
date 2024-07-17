@@ -42,7 +42,7 @@ function App() {
       }
     };
     fetchImages();
-  }, [page, query]);
+  }, [page]);
 
   useEffect(() => {
     if (endOfGalleryRef.current) {
@@ -57,7 +57,7 @@ function App() {
     }
     setQuery(value);
     setImages([]);
-    setError(null);
+    // setError(null);
     setIsEmpty(false);
     setIsVisible(false);
     setPage(1);
@@ -83,6 +83,19 @@ function App() {
     setModalUrl('');
   };
 
+  useEffect(() => {
+  if (error !== null) {    
+    const id = setTimeout(() => {     
+      setError(null);
+    }, 1000);
+    return () => {      
+      clearTimeout(id);
+    };
+  }
+}, [error]);
+
+  
+
   return (
     <div className={s.container}>
       <SearchBar submit={handleSubmit} input={handleChange} query={query} />
@@ -95,8 +108,8 @@ function App() {
         <LoadMoreBtn onClick={loadMore} disabled={loading} text={loading ? 'Loading' : 'Load more'} />
       )}
       {error && (
-        <ErrorMessage />
-      )}
+        <ErrorMessage/>
+       )}
 
       {showModal && (
         <ImageModal
@@ -105,7 +118,7 @@ function App() {
           src={modalUrl}
           alt={alt}
         />
-      )}
+      )}      
     </div>
   );
 }
