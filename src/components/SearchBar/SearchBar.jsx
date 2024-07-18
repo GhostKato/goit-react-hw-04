@@ -12,9 +12,8 @@ function SearchBar({ submit, input, query }) {
   }
 
   return (
-    <div className={s.wraper}>
-      <form onSubmit={handleSubmit} className={s.form}>
-        <label>
+    <header className={s.wraper}>
+      <form onSubmit={handleSubmit} className={s.form}>        
           <input
             className={s.input}
             placeholder="Search images and photos"
@@ -23,13 +22,12 @@ function SearchBar({ submit, input, query }) {
             onChange={handleChange}
             required
             autoFocus
-          />
-        </label>
+          />        
         <button className={s.button} type="submit">
           <CiSearch className={s.icon}/>
         </button>
       </form>
-    </div>
+    </header>
   )
 }
 
