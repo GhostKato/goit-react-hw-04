@@ -51,10 +51,11 @@ function App() {
   }, [page, searchSwitch]);
 
   useEffect(() => {
-    if (endOfGalleryRef.current) {
-      endOfGalleryRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [images]);
+  if (!loading && endOfGalleryRef.current) {
+    const { top } = endOfGalleryRef.current.getBoundingClientRect();
+    window.scrollTo({ top: window.scrollY + top, behavior: 'smooth' });
+  }
+}, [loading]);
 
   const handleSubmit = value => {    
     setSearchSwitch(!searchSwitch);
