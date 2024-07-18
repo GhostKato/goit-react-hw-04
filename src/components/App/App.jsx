@@ -52,10 +52,11 @@ function App() {
 
   useEffect(() => {
   if (!loading && endOfGalleryRef.current) {
-    const { top } = endOfGalleryRef.current.getBoundingClientRect();
-    window.scrollTo({ top: window.scrollY + top, behavior: 'smooth' });
+    setTimeout(() => {
+      endOfGalleryRef.current.scrollIntoView({ behavior: 'smooth' });
+    }, 100); // Затримка у 100 мілісекунд
   }
-}, [loading]);
+}, [images, loading]);
 
   const handleSubmit = value => {    
     setSearchSwitch(!searchSwitch);
