@@ -56,11 +56,7 @@ function App() {
     }
   }, [images]);
 
-  const handleSubmit = value => {
-    if (!value.trim()) {
-      alert('Sorry, cant be empty');
-      return;
-    }
+  const handleSubmit = value => {    
     setSearchSwitch(!searchSwitch);
     setQuery(value);
     setImages([]);   
@@ -107,11 +103,12 @@ function App() {
       {images.length > 0 && (
         <ImageGallery images={images} openModal={openModal} />
       )}
-      <div ref={endOfGalleryRef}></div>
+      
       {loading && <Loader />}
       {isVisible && (
         <LoadMoreBtn onClick={loadMore} disabled={loading} text={loading ? 'Loading' : 'Load more'} />
       )}
+      <div ref={endOfGalleryRef}></div>
       {error && <ErrorMessage />}      
       <ImageModal
         modalIsOpen={isOpenModalMenu}
