@@ -19,7 +19,9 @@ function App() {
   const [loading, setLoading] = useState(false);  
   const [modalUrl, setModalUrl] = useState('');
   const [alt, setAlt] = useState('');
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState('');  
+  const [instagram, setInstagram] = useState('');
+  const [location, setLocation] = useState('');  
 
   const [isOpenModalMenu, toggleModalMenu] = useToggle(false);  
 
@@ -38,7 +40,7 @@ function App() {
         if (!results.length) {         
           setIsVisible(false);
           return;
-        }
+        }        
         setImages(prevImages => [...prevImages, ...results]);
         setIsVisible(page < Math.ceil(total / results.length));        
       } catch (error) {
@@ -52,9 +54,13 @@ function App() {
 
   useEffect(() => {
   if (!loading && endOfGalleryRef.current) {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       endOfGalleryRef.current.scrollIntoView({ behavior: 'smooth' });
-    }, 100); // Затримка у 100 мілісекунд
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }
 }, [images, loading]);
 
@@ -74,18 +80,22 @@ function App() {
     setPage(prevPage => prevPage + 1);
   };
 
-  const openModal = (url, alt, description) => {
+  const openModal = (url, alt, description, instagram, location) => {
     toggleModalMenu();
     setAlt(alt);
-    setDescription(description)
-    setModalUrl(url);
+    setDescription(description);
+    setModalUrl(url);    
+    setInstagram(instagram);
+    setLocation(location);    
   };
 
   const closeModal = () => {
     toggleModalMenu();
     setAlt('');
-    setDescription('')
-    setModalUrl('');
+    setDescription('');
+    setModalUrl('');    
+    setInstagram('');
+    setLocation('');   
   };
 
   useEffect(() => {
@@ -117,7 +127,9 @@ function App() {
         closeModal={closeModal}
         src={modalUrl}
         alt={alt}
-        description={description}
+        description={description}        
+        instagram={instagram}
+        location={location}        
       />
     </div>
   );
