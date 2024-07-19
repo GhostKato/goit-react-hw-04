@@ -4,9 +4,9 @@ import s from './ImageGallery.module.css';
 function ImageGallery({ images, openModal }) {
   return (
     <ul className={s.ul}>
-      {images.map(({ id, alt_description, description, urls, user }, index) => (
+      {images.map(({ id, alt_description, description, urls, user }) => (
         <ImageCard
-          key={`${id}-${urls.small}-${index}`}
+          key={id}
           alt={alt_description}
           src={urls.small} 
           onClick={() => openModal(urls.regular, alt_description, description, user.instagram_username, user.location

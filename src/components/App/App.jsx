@@ -40,9 +40,10 @@ function App() {
         if (!results.length) {         
           setIsVisible(false);
           return;
-        }        
+        }  
+       
         setImages(prevImages => [...prevImages, ...results]);
-        setIsVisible(page < Math.ceil(total / results.length));        
+        setIsVisible(page < Math.ceil(total / results.length));          
       } catch (error) {
         setError(error);
       } finally {
