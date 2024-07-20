@@ -109,7 +109,7 @@ function App() {
 
       {isLoading && <Loader />}
 
-      {totalPages > page && !isError && (
+      {totalPages > page && !isError && !isLoading && (
       <LoadMoreBtn onClick={() => setPage(prev => prev + 1)} />
       )}
 

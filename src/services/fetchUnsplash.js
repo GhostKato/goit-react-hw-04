@@ -5,7 +5,7 @@ const getImages = async (query, page) => {
     params: {
       query,
       page,
-       per_page: 15,
+       per_page: 8,
       client_id: "wgQYQmTP2P2fak55_dmG-lrZF9fAU-cLvea-l11POTI",
     },
   });

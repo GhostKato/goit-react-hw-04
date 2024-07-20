@@ -11,7 +11,7 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
     border: 'none',
-    overflow: 'hidden'
+    overflow: 'hidden',     
   },
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.9)',

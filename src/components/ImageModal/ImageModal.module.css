@@ -4,13 +4,13 @@
   overflow: hidden;
   border: 2px solid #009156;
   box-shadow: 0px 0px 10px 5px rgba(255, 255, 255, 0.5);
+  width: 300px;
+  height: auto;
 }
 
 .imgContainer {
   overflow: hidden;
-  object-fit: cover;
-  width: 300px;
-  height: 300px;
+  object-fit: contain;
 }
 
 .list {
