@@ -28,10 +28,8 @@ function SearchBar({ setQuery }) {
             className={s.input}
             placeholder='Search images and photos'
             name='query'
-             type="text"           
-            
-            required
-            autoFocus
+             type="text"          
+            autoFocus                        
           />        
           <button className={s.button} type='submit'>
             <CiSearch className={s.icon}/>

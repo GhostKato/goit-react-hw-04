@@ -8,7 +8,6 @@ const ErrorMessage = () => {
         <div className={s.error}>
       <p className={s.p}>Error</p>
       <BarLoader color={"red"} size={500} height={10}/>
-
         </div>        
   )
 };
