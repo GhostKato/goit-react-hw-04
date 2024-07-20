@@ -3,6 +3,7 @@
   border-radius: 5px;
   overflow: hidden;
   width: 300px;
+  height: 200px;
   &:hover {
     transform: scale(102%);
     outline: 2px solid #009156;

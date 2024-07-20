@@ -1,60 +1,36 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import Loader from '../Loader/Loader';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import SearchBar from '../SearchBar/SearchBar';
-import { getPhotos } from '../../js/requestUnsplash';
+import getPhotos from '../../services/fetchUnsplash';
 import ImageModal from '../ImageModal/ImageModal';
 import s from './App.module.css';
 import useToggle from '../../hooks/modalVisibility';
 
 function App() {
+  const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
-  const [searchSwitch, setSearchSwitch] = useState(true);
+  const [totalPages, setTotalPages] = useState(0);
   const [images, setImages] = useState([]);
-  const [query, setQuery] = useState('');  
-  const [isVisible, setIsVisible] = useState(false);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);  
-  const [modalUrl, setModalUrl] = useState('');
-  const [alt, setAlt] = useState('');
-  const [description, setDescription] = useState('');  
-  const [instagram, setInstagram] = useState('');
-  const [location, setLocation] = useState('');  
 
-  const [isOpenModalMenu, toggleModalMenu] = useToggle(false);  
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [isOpenModal, toggleModal] = useToggle(false);
+  const [modalData, setModalData] = useState({
+    url: '',
+    alt: '',
+    description: '',
+    instagram: '',
+    location: '',
+  });
 
   const endOfGalleryRef = useRef(null);
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      setLoading(true);
-      
-      try {
-        if (query === '') {
-          setLoading(false);
-          return;
-        }
-        const { results, total } = await getPhotos(query, page);
-        if (!results.length) {         
-          setIsVisible(false);
-          return;
-        }  
-       
-        setImages(prevImages => [...prevImages, ...results]);
-        setIsVisible(page < Math.ceil(total / results.length));          
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchImages();
-  }, [page, searchSwitch]);
-
-  useEffect(() => {
-  if (!loading && endOfGalleryRef.current) {
+   useEffect(() => {
+  if (!isLoading && endOfGalleryRef.current) {
     const timeoutId = setTimeout(() => {
       endOfGalleryRef.current.scrollIntoView({ behavior: 'smooth' });
     }, 100);
@@ -63,74 +39,88 @@ function App() {
       clearTimeout(timeoutId);
     };
   }
-}, [images, loading]);
+}, [images, isLoading]);
 
-  const handleSubmit = value => {    
-    setSearchSwitch(!searchSwitch);
-    setQuery(value);
-    setImages([]);   
-    setIsVisible(false);
-    setPage(1);
+  useEffect(() => {
+    const fetchImages = async () => {
+       if (!query) return;
+
+      try {
+        setIsLoading(true);
+        setIsError(false);
+
+        const { results, total_pages} = await getPhotos(query, page);
+
+        setImages(prev => page === 1 ? results : [...prev, ...results]);
+        console.log(results);
+        setTotalPages(total_pages);
+      } catch (error) {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchImages();
+  }, [query, page]);
+
+  const handleSubmit = query => {
+    setQuery(query);
+    setImages([]);
+    setPage(1);    
   };
 
-  const handleChange = value => {
-    setQuery(value);
+  const handleOpenModal = (url, alt, description, instagram, location) => {
+    toggleModal();
+    setModalData({
+      url,
+      alt,
+      description,
+      instagram,
+      location,
+    });
   };
 
-  const loadMore = () => {
-    setPage(prevPage => prevPage + 1);
-  };
-
-  const openModal = (url, alt, description, instagram, location) => {
-    toggleModalMenu();
-    setAlt(alt);
-    setDescription(description);
-    setModalUrl(url);    
-    setInstagram(instagram);
-    setLocation(location);    
-  };
-
-  const closeModal = () => {
-    toggleModalMenu();
-    setAlt('');
-    setDescription('');
-    setModalUrl('');    
-    setInstagram('');
-    setLocation('');   
+  const handleCloseModal = () => {
+    toggleModal();
+    setModalData({
+      url: '',
+      alt: '',
+      description: '',
+      instagram: '',
+      location: '',
+    });
   };
 
   useEffect(() => {
-    if (error !== null) {    
-      const id = setTimeout(() => {     
-        setError(null);
+    if (isError !== false) {
+      const id = setTimeout(() => {
+        setIsError(false);
       }, 1000);
-      return () => {      
+      return () => {
         clearTimeout(id);
       };
     }
-  }, [error]);
+  }, [isError]);
 
   return (
     <div className={s.container}>
-      <SearchBar submit={handleSubmit} input={handleChange} query={query} />
-      {images.length > 0 && (
-        <ImageGallery images={images} openModal={openModal} />
+      <SearchBar setQuery={handleSubmit} />      
+        <ImageGallery images={images} handleOpenModal={handleOpenModal} />     
+
+      {isLoading && <Loader />}
+
+      {totalPages > page && !isError && (
+      <LoadMoreBtn onClick={() => setPage(prev => prev + 1)} />
       )}
-      
-      {loading && <Loader />}
-      {isVisible && (
-        <LoadMoreBtn onClick={loadMore} disabled={loading} text={loading ? 'Loading' : 'Load more'} />
-      )}
+
       <div ref={endOfGalleryRef}></div>
-      {error && <ErrorMessage />}      
+      
+      {isError && <ErrorMessage />}
+
       <ImageModal
-        modalIsOpen={isOpenModalMenu}
-        closeModal={closeModal}
-        src={modalUrl}
-        alt={alt}
-        description={description}        
-        instagram={instagram}
-        location={location}        
+        isOpen={isOpenModal}
+        handleCloseModal={handleCloseModal}
+        modalData={modalData}
       />
     </div>
   );

@@ -1,23 +1,14 @@
 import ImageCard from '../ImageCard/ImageCard';
 import s from './ImageGallery.module.css';
 
-function ImageGallery({ images, openModal }) {
+function ImageGallery({ images, handleOpenModal }) {
   return (
     <ul className={s.ul}>
-      {images.map(({ id, alt_description, description, urls, user }) => (
-        <ImageCard
-          key={id}
-          alt={alt_description}
-          src={urls.small} 
-          onClick={() => openModal(urls.regular, alt_description, description, user.instagram_username, user.location
-)}
-        />
+      {images.map((image) => (
+        <ImageCard key={image.id} image={image} handleOpenModal={handleOpenModal} />
       ))}
     </ul>
   );
 }
 
 export default ImageGallery;
-
-
-

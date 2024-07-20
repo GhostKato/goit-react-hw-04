@@ -1,8 +1,8 @@
 import s from './LoadMoreBtn.module.css'
 
-function LoadMoreBtn({text, onClick}) {
+function LoadMoreBtn({onClick}) {
   return (
-    <button onClick={onClick} className={s.button}>{ text }</button>
+    <button onClick={onClick} className={s.button}>Load more</button>
   )
 }
 
