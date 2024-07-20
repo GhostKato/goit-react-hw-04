@@ -5,12 +5,11 @@
   border: 2px solid #009156;
   box-shadow: 0px 0px 10px 5px rgba(255, 255, 255, 0.5);
   width: 300px;
-  height: auto;
 }
 
 .imgContainer {
+  height: 200px;
   overflow: hidden;
-  object-fit: contain;
 }
 
 .list {
@@ -43,10 +42,26 @@
     flex-direction: row;
     max-width: 768px;
   }
+
+  .modal {
+    width: 650px;
+  }
+
+  .imgContainer {
+    height: auto;
+  }
 }
 
 @media screen and (min-width: 1280px) {
   .list {
     max-width: 950px;
+  }
+
+  .modal {
+    width: 1050px;
+  }
+
+  .imgContainer {
+    height: 550px;
   }
 }

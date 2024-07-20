@@ -32,6 +32,7 @@ const ImageModal = ({ isOpen, handleCloseModal, modalData }) => {
     >
       <div className={s.modal}>        
         <div className={s.imgContainer}><img src={url} alt={alt} className={s.image} /></div>
+        
         <ul className={s.list}>
           {description && (
             <li className={s.item}>
@@ -51,7 +52,8 @@ const ImageModal = ({ isOpen, handleCloseModal, modalData }) => {
               <p className={s.p}>{instagram}</p>
             </li>
           )}          
-        </ul>        
+          </ul> 
+       
       </div>
     </Modal>
   );

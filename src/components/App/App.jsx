@@ -39,8 +39,8 @@ function App() {
       clearTimeout(timeoutId);
     };
   }
-}, [images, isLoading]);
-
+   }, [images, isLoading]); 
+  
   useEffect(() => {
     const fetchImages = async () => {
        if (!query) return;
@@ -71,6 +71,7 @@ function App() {
 
   const handleOpenModal = (url, alt, description, instagram, location) => {
     toggleModal();
+     document.body.style.overflow = 'hidden';
     setModalData({
       url,
       alt,
@@ -82,6 +83,7 @@ function App() {
 
   const handleCloseModal = () => {
     toggleModal();
+    document.body.style.overflow = 'unset';
     setModalData({
       url: '',
       alt: '',
