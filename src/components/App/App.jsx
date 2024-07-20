@@ -52,7 +52,7 @@ function App() {
         const { results, total_pages} = await getPhotos(query, page);
 
         setImages(prev => page === 1 ? results : [...prev, ...results]);
-        console.log(results);
+        
         setTotalPages(total_pages);
       } catch (error) {
         setIsError(true);
